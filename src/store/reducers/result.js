@@ -11,7 +11,8 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 results: state.results.concat({
                     id: new Date(),
-                    value: action.result
+                    name: action.payload.name,
+                    age: action.payload.age
                 })
             };
 

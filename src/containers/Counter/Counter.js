@@ -4,37 +4,9 @@ import { connect } from "react-redux";
 import CounterControl from "../../components/CounterControl/CounterControl";
 import CounterOutput from "../../components/CounterOutput/CounterOutput";
 import * as actionTypes from "../../store/actions";
+import Form from "../../components/Form/Form";
 
 class Counter extends Component {
-    state = {
-        counter: 0
-    };
-
-    counterChangedHandler = (action, value) => {
-        switch (action) {
-            case "inc":
-                this.setState(prevState => {
-                    return { counter: prevState.counter + 1 };
-                });
-                break;
-            case "dec":
-                this.setState(prevState => {
-                    return { counter: prevState.counter - 1 };
-                });
-                break;
-            case "add":
-                this.setState(prevState => {
-                    return { counter: prevState.counter + value };
-                });
-                break;
-            case "sub":
-                this.setState(prevState => {
-                    return { counter: prevState.counter - value };
-                });
-                break;
-        }
-    };
-
     render() {
         return (
             <div>
@@ -44,12 +16,15 @@ class Counter extends Component {
                 <CounterControl label="Add 5" clicked={this.props.onAddCounter} />
                 <CounterControl label="Subtract 5" clicked={this.props.onSubtractCounter} />
                 <hr />
-                <button onClick={() => this.props.onStoreResult(this.props.ctr)}>Store Result</button>
+                <Form added={(age, name) => this.props.onStoreResult(age, name)} />
+
+                {/* <button onClick={() => this.props.onStoreResult(this.props.ctr)}>Store Result</button> */}
+
                 <ul>
                     {this.props.storedResults.map((strResult, index) => {
                         return (
                             <li key={index} onClick={() => this.props.onDeleteResult(index)}>
-                                {strResult.value + " " + strResult.id}
+                                {strResult.name + " " + strResult.age + " Time: " + strResult.id}
                             </li>
                         );
                     })}
@@ -72,7 +47,7 @@ const mapDispatchToProps = dispatch => {
         onDecrementCounter: () => dispatch({ type: actionTypes.DECREMENT }),
         onAddCounter: () => dispatch({ type: actionTypes.ADD, val: 10 }),
         onSubtractCounter: () => dispatch({ type: actionTypes.SUBTRACT, val: 15 }),
-        onStoreResult: result => dispatch({ type: actionTypes.STORE_RESULT, result: result }),
+        onStoreResult: (age, name) => dispatch({ type: actionTypes.STORE_RESULT, payload: { name: name, age: age } }),
         onDeleteResult: id => dispatch({ type: actionTypes.DELETE_RESULT, payload: id })
     };
 };
